@@ -11,7 +11,7 @@
             background-color: black;
             color: white;
             font-size: 0.75em;
-            font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+            font-family: "Century Gothic",CenturyGothic,AppleGothic,sans-serif;
             text-align: center;
         }
 
@@ -28,13 +28,12 @@
         }
 
         .versionLabel {
-            /*font-style: italic;*/
             font-size: 0.75em;
             color: #7f9ca7;
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+            font-family: "Century Gothic",CenturyGothic,AppleGothic,sans-serif;
             font-variant: small-caps;
             font-weight: 400;
             margin-bottom: 5px;
