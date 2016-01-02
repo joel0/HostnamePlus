@@ -101,7 +101,7 @@
                 <asp:Label runat="server" ID="UserAgent" />
             </p>
         </div>
-        &copy;2015 Joel May
+        &copy;2015-2016 Joel May
     </form>
 </body>
 </html>
