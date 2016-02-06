@@ -78,7 +78,7 @@
             }
     </style>
     <asp:Literal runat="server" ID="IPv4Javascript">
-        <script src="http://ipv4.hostname.jmay.us/ipv4js.ashx" defer="defer"></script>
+        <script src="//ipv4.hostname.jmay.us/ipv4js.ashx" defer="defer"></script>
     </asp:Literal>
 </head>
 <body>
