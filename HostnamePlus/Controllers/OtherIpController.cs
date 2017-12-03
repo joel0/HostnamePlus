@@ -16,6 +16,7 @@ namespace HostnamePlus.Controllers
         [HttpGet]
         public IpModel Get()
         {
+            Response.Headers.Add("Access-Control-Allow-Origin", "*");
             return new IpModel(Request);
         }
     }

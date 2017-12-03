@@ -11,26 +11,36 @@ namespace HostnamePlus.Pages
 {
     public class IndexModel : PageModel
     {
-        private IPAddress RemoteIpAddress
-        {
-            get
-            {
+        private const String BASE_URL = "hostname.jmay.us";
+
+        public String OtherIpAPIURL {
+            get {
+                // If the connection is IPv6, hit the IPv4 API, and vice versa.
+                String subdomain = IsIPv6 ? "ipv4" : "ipv6";
+                return String.Format("//{0}.{1}/api/OtherIp", subdomain, BASE_URL);
+            }
+        }
+
+        public String OtherIpType {
+            get {
+                return IsIPv6 ? "IPv4" : "IPv6";
+            }
+        }
+
+        private IPAddress RemoteIpAddress {
+            get {
                 return Request.HttpContext.Connection.RemoteIpAddress;
             }
         }
 
-        public bool IsIPv6
-        {
-            get
-            {
+        public bool IsIPv6 {
+            get {
                 return RemoteIpAddress.AddressFamily == AddressFamily.InterNetworkV6;
             }
         }
 
-        public String HostName
-        {
-            get
-            {
+        public String HostName {
+            get {
                 try {
                     return Dns.GetHostEntry(RemoteIpAddress).HostName;
                 } catch {
@@ -39,18 +49,14 @@ namespace HostnamePlus.Pages
             }
         }
 
-        public String IP
-        {
-            get
-            {
+        public String IP {
+            get {
                 return RemoteIpAddress.ToString();
             }
         }
 
-        public String UserAgent
-        {
-            get
-            {
+        public String UserAgent {
+            get {
                 return Request.Headers["User-Agent"].ToString();
             }
         }

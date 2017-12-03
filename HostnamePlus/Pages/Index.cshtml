@@ -4,14 +4,11 @@
     ViewData["title"] = "Homename+";
 }
 @section Scripts {
-    @if (Model.IsIPv6)
-    {
-        <script src="//ipv4.hostname.jmay.us/ipv4js.ashx" defer="defer"></script>
-    }
-    else
-    {
-        <!--<script src="//ipv6.hostname.jmay.us/ipv6js.ashx" defer="defer"></script>-->
-    }
+    <script type="text/javascript">
+        var otherIpAPIURL = "@Model.OtherIpAPIURL";
+        var otherIpType = "@Model.OtherIpType";
+    </script>
+    <script src="~/js/GetOtherIp.js"></script>
 }
 
 <h2>Hostname</h2>
