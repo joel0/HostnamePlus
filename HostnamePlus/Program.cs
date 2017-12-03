@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace HostnamePlus
 {
     public class Program
     {
+        public const String BASE_URL = "hostname.jmay.us";
+        public static String getOtherIpJsPath;
+        public static String mainCssPath;
+
         public static void Main(string[] args)
         {
             BuildWebHost(args).Run();

@@ -1,0 +1,68 @@
+﻿body {
+    background-color: black;
+    color: white;
+    font-size: 0.75em;
+    font-family: "Century Gothic",CenturyGothic,AppleGothic,sans-serif;
+    text-align: center;
+}
+
+.main {
+    background-color: #003a4f;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    max-width: 700px;
+    width: auto;
+    padding: 10px 20px 20px 20px;
+    text-align: left;
+}
+
+.versionLabel {
+    font-size: 0.75em;
+    color: #7f9ca7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Century Gothic",CenturyGothic,AppleGothic,sans-serif;
+    font-variant: small-caps;
+    font-weight: 400;
+    margin-bottom: 5px;
+    margin-top: 40px;
+}
+
+h1 {
+    margin-top: 0px;
+    text-align: right;
+}
+
+h3 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 15px;
+    font-size: medium;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: red;
+}
+
+p, ul {
+    margin-left: 30px;
+    margin-top: 5px;
+    font-size: small;
+    line-height: 1.5;
+}
+
+ul {
+    margin-left: initial;
+}
+
+a {
+    color: lightcyan;
+}
+    a:hover {
+        text-decoration: none;
+    }

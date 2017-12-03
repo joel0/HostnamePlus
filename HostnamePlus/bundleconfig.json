@@ -1,3 +1,19 @@
 ﻿// Configure bundling and minification for the project.
 // More info at https://go.microsoft.com/fwlink/?LinkId=808241
-[]
+[
+  {
+    "outputFileName": "wwwroot/js/GetOtherIp.min.js",
+    "inputFiles": [ "wwwroot/js/GetOtherIp.js" ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/main.min.css",
+    "inputFiles": [ "wwwroot/css/main.css" ],
+    "minify": {
+      "enabled": true
+    }
+  }
+]

@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace HostnamePlus
 {
@@ -27,23 +24,29 @@ namespace HostnamePlus
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
-            }
-            else
-            {
+                Program.getOtherIpJsPath = "/js/GetOtherIp.js";
+                Program.mainCssPath = "/css/main.css";
+            } else {
                 app.UseExceptionHandler("/Error");
+                Program.getOtherIpJsPath = "/js/GetOtherIp.min.js";
+                Program.mainCssPath = "/css/main.min.css";
             }
+
+            // Note: this is for being reverse proxied. Remove if using Kesteral without a reverse proxy.
+            // The reverse proxy server must set the XForwardedFor header.
+            app.UseForwardedHeaders(new ForwardedHeadersOptions {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
-            {
+            app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Index}/{action=Index}/{id?}");
+                    template: "{controller=Index}/{action=Index}/");
             });
         }
     }
