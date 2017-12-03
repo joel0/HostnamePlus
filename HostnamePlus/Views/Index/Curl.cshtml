@@ -1,0 +1,9 @@
+﻿@model HostnamePlus.Models.IndexModel
+@{
+    const String formatString = "{0,-11}";
+}
+@String.Format(formatString, "Hostname: ")@Model.HostName
+@String.Format(formatString, "IP: ")@Model.IP
+@String.Format(formatString, "UserAgent: ")@Model.UserAgent
+
+Simplified output for curl. Change your UserAgent for HTML output.
