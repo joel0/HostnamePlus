@@ -31,7 +31,11 @@ namespace HostnamePlus.Pages
         {
             get
             {
-                return Dns.GetHostEntry(RemoteIpAddress).HostName;
+                try {
+                    return Dns.GetHostEntry(RemoteIpAddress).HostName;
+                } catch {
+                    return "N/A";
+                }
             }
         }
 
