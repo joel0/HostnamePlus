@@ -1,4 +1,5 @@
 # HostnamePlus
-A website for displaying hostname, IP, and useragent. If connecting through IPv6, it will attempt to also display IPv4 information.
+A website for displaying reverse DNS hostname, IP, and user agent. Through
+Javascript, the page will load both the IPv4 and IPv6 hostnames and IPs.
 
-Currently hosted at http://hostname.jmay.us
+Currently hosted at https://hostname.jmay.us
