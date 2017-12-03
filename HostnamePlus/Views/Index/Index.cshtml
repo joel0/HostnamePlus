@@ -1,16 +1,19 @@
 ﻿@model HostnamePlus.Models.IndexModel
-
 @{
     ViewData["title"] = "Hostname+";
     Layout = "~/Pages/_Layout.cshtml";
 }
-
 @section Scripts {
     <script type="text/javascript">
         var otherIpAPIURL = "@Model.OtherIpAPIURL";
         var otherIpType = "@Model.OtherIpType";
     </script>
+}
+@section DevelopmentScripts {
     <script src="~/js/GetOtherIp.js"></script>
+}
+@section ProductionScripts {
+    <script src="~/js/GetOtherIp.min.js"></script>
 }
 
 <h2>Hostname</h2>
