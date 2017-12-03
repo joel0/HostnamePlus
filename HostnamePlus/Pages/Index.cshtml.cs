@@ -4,16 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net;
+using System.Net.Sockets;
 
 namespace HostnamePlus.Pages
 {
     public class IndexModel : PageModel
     {
+        private IPAddress RemoteIpAddress
+        {
+            get
+            {
+                return Request.HttpContext.Connection.RemoteIpAddress;
+            }
+        }
+
         public bool IsIPv6
         {
             get
             {
-                return Request.HttpContext.Connection.RemoteIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6;
+                return RemoteIpAddress.AddressFamily == AddressFamily.InterNetworkV6;
             }
         }
 
@@ -21,7 +31,7 @@ namespace HostnamePlus.Pages
         {
             get
             {
-                return "TODO HOSTNAME";
+                return Dns.GetHostEntry(RemoteIpAddress).HostName;
             }
         }
 
@@ -29,7 +39,7 @@ namespace HostnamePlus.Pages
         {
             get
             {
-                return "TODO IP";
+                return RemoteIpAddress.ToString();
             }
         }
 
@@ -37,7 +47,7 @@ namespace HostnamePlus.Pages
         {
             get
             {
-                return "TODO USERAGENT";
+                return Request.Headers["User-Agent"].ToString();
             }
         }
 
