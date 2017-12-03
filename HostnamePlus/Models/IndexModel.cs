@@ -1,17 +1,22 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
-namespace HostnamePlus.Pages
+namespace HostnamePlus.Models
 {
-    public class IndexModel : PageModel
+    public class IndexModel
     {
         private const String BASE_URL = "hostname.jmay.us";
+        private HttpRequest Request;
+
+        public IndexModel(HttpRequest Request)
+        {
+            this.Request = Request;
+        }
 
         public String OtherIpAPIURL {
             get {
@@ -59,11 +64,6 @@ namespace HostnamePlus.Pages
             get {
                 return Request.Headers["User-Agent"].ToString();
             }
-        }
-
-        public void OnGet()
-        {
-
         }
     }
 }

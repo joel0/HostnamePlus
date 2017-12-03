@@ -1,8 +1,10 @@
-﻿@page
-@model IndexModel
-@{ 
+﻿@model HostnamePlus.Models.IndexModel
+
+@{
     ViewData["title"] = "Homename+";
+    Layout = "~/Pages/_Layout.cshtml";
 }
+
 @section Scripts {
     <script type="text/javascript">
         var otherIpAPIURL = "@Model.OtherIpAPIURL";
