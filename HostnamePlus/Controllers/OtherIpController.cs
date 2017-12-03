@@ -18,8 +18,7 @@ namespace HostnamePlus.Controllers
         [HttpGet]
         public IndexModel Get()
         {
-            String origin = String.Format("{0} {1}.{0} {2}.{0}", Program.BASE_URL, "ipv4", "ipv6");
-            Response.Headers.Add("Access-Control-Allow-Origin", origin);
+            Response.Headers.Add("Access-Control-Allow-Origin", "*");
             return new IndexModel(Request);
         }
     }
