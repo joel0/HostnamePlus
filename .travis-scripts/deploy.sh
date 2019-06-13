@@ -3,6 +3,7 @@
 # Exit script if any error occurs
 set -e
 
+cd $TRAVIS_BUILD_DIR
 
 # Prepare
 dotnet restore

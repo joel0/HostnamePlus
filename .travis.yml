@@ -3,8 +3,7 @@ dist: xenial
 addons:
   ssh_known_hosts: vps2.jmay.us
 env:
-  - deploy_server=vps2.jmay.us
-  - deploy_user=deploy_hostname_jmay_us
+  - deploy_server=vps2.jmay.us deploy_user=deploy_hostname_jmay_us
 mono: none
 dotnet: 2.2
 deploy:
