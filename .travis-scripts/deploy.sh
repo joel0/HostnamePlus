@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit script if any error occurs
-set -e
+#set -e
 
 cd $TRAVIS_BUILD_DIR
 
