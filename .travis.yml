@@ -9,7 +9,7 @@ dotnet: 2.2
 
 branches:
   only:
-    branch: master
+    - master
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_bf1720b5551b_key -iv $encrypted_bf1720b5551b_iv
