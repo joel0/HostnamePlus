@@ -6,14 +6,21 @@ env:
   - deploy_server=vps2.jmay.us deploy_user=deploy_hostname_jmay_us
 mono: none
 dotnet: 2.2
-deploy:
-  provider: script
-  script: echo hi
-  on:
+
+branches:
+  only:
     branch: master
+
 before_install:
   - openssl aes-256-cbc -K $encrypted_bf1720b5551b_key -iv $encrypted_bf1720b5551b_iv
     -in .travis-scripts/deploy_key.enc -out .travis-scripts/deploy_key -d
   - eval $(ssh-agent)
   - chmod 600 .travis-scripts/deploy_key
   # - ssh-add .travis-scripts/deploy_key
+install:
+  - dotnet restore
+  - dotnet build -C Release
+  - dotnet publish -c Release -o ./publish
+deploy:
+  provider: script
+  script: "./.travis-scripts/deploy.sh"
