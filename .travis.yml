@@ -8,7 +8,7 @@ mono: none
 dotnet: 2.2
 deploy:
   provider: script
-  script: "bash ./.travis-scripts/deploy.sh"
+  script: echo hi
   on:
     branch: master
 before_install:
