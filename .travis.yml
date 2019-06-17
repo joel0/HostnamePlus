@@ -4,6 +4,7 @@ addons:
   ssh_known_hosts: vps2.jmay.us
 env:
   - deploy_server=vps2.jmay.us deploy_user=deploy_hostname_jmay_us
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true NUGET_XMLDOC_MODE=skip
 mono: none
 dotnet: 2.2
 
