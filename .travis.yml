@@ -16,4 +16,4 @@ before_install:
     -in .travis-scripts/deploy_key.enc -out .travis-scripts/deploy_key -d
   - eval $(ssh-agent)
   - chmod 600 .travis-scripts/deploy_key
-  - ssh-add .travis-scripts/deploy_key
+  # - ssh-add .travis-scripts/deploy_key
