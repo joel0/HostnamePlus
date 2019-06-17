@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # Exit script if any error occurs
-#set -e
-echo testing
-# cd $TRAVIS_BUILD_DIR
+set -e
 
 # # Prepare
 # dotnet restore
@@ -14,10 +12,10 @@ echo testing
 # # Bundle
 # dotnet publish -c Release -o ./publish
 
-# # Copy to production server
-# ssh $deploy_user@$deploy_server sudo systemctl stop kesteral-hostname
-# rsync -vrlpt \
-#     --delete \
-#     --delete-excluded \
-#     ./HostnamePlus/publish/ $deploy_user@$deploy_server:~/www/
-# ssh $deploy_user@$deploy_server sudo systemctl start kesteral-hostname
+# Copy to production server
+ssh $deploy_user@$deploy_server sudo systemctl stop kesteral-hostname
+rsync -vrlpt \
+    --delete \
+    --delete-excluded \
+    ./HostnamePlus/publish/ $deploy_user@$deploy_server:~/www/
+ssh $deploy_user@$deploy_server sudo systemctl start kesteral-hostname

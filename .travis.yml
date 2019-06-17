@@ -18,8 +18,7 @@ before_install:
   - chmod 600 .travis-scripts/deploy_key
   - ssh-add .travis-scripts/deploy_key
 script:
-  - echo hello from script
-install:
+  - cd $TRAVIS_BUILD_DIR
   - dotnet restore
   - dotnet build -c Release
   - dotnet publish -c Release -o ./publish
