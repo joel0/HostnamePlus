@@ -19,6 +19,8 @@ before_install:
   - eval $(ssh-agent)
   - chmod 600 .travis-scripts/deploy_key
   - ssh-add .travis-scripts/deploy_key
+script:
+  - echo hello script element
 # script:
 #   - dotnet restore $TRAVIS_BUILD_DIR
 #   - dotnet build -c Release $TRAVIS_BUILD_DIR
