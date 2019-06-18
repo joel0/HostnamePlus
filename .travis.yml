@@ -12,16 +12,17 @@ branches:
   only:
     - master
 
+solution: HostnamePlus.sln
 before_install:
   - openssl aes-256-cbc -K $encrypted_bf1720b5551b_key -iv $encrypted_bf1720b5551b_iv
     -in .travis-scripts/deploy_key.enc -out .travis-scripts/deploy_key -d
   - eval $(ssh-agent)
   - chmod 600 .travis-scripts/deploy_key
   - ssh-add .travis-scripts/deploy_key
-script:
-  - dotnet restore $TRAVIS_BUILD_DIR
-  - dotnet build -c Release $TRAVIS_BUILD_DIR
-  - dotnet publish -c Release -o ./publish $TRAVIS_BUILD_DIR
+# script:
+#   - dotnet restore $TRAVIS_BUILD_DIR
+#   - dotnet build -c Release $TRAVIS_BUILD_DIR
+#   - dotnet publish -c Release -o ./publish $TRAVIS_BUILD_DIR
 deploy:
   provider: script
   skip_cleanup: true
