@@ -21,7 +21,8 @@ before_install:
 script:
   - dotnet restore $TRAVIS_BUILD_DIR
   - dotnet build -c Release $TRAVIS_BUILD_DIR
-  - dotnet publish -c Release -o $HOME/publish $TRAVIS_BUILD_DIR
+  - dotnet publish -c Release -o ./publish $TRAVIS_BUILD_DIR
 deploy:
   provider: script
+  skip_cleanup: true
   script: "./.travis-scripts/deploy.sh"
