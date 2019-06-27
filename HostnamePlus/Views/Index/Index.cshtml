@@ -4,7 +4,7 @@
     Layout = "~/Pages/_Layout.cshtml";
 }
 @section Scripts {
-    <script type="text/javascript">
+    <script>
         var otherIpAPIURL = "@Model.OtherIpAPIURL";
         var otherIpType = "@Model.OtherIpType";
     </script>
@@ -18,15 +18,15 @@
 
 <h2>Hostname</h2>
 <p>
-    <div>@Model.HostName</div>
+    @Model.HostName<br />
     <span id="OtherHostname"></span>
 </p>
 <h2>IP</h2>
 <p>
-    <div>@Model.IP</div>
+    @Model.IP<br />
     <span id="OtherAddress"></span>
 </p>
 <h2>User Agent</h2>
 <p>
-    <div>@Model.UserAgent</div>
+    @Model.UserAgent
 </p>
