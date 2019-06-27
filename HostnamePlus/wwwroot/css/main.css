@@ -43,6 +43,10 @@ h3 {
     font-size: medium;
 }
 
+.sectionHeading {
+    margin-bottom: 0.7em;
+}
+
 hr {
     border: none;
     height: 1px;
