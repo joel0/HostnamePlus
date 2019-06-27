@@ -50,6 +50,15 @@ namespace HostnamePlus.Models
         }
 
         /// <summary>
+        /// The friendly text for the IP family.
+        /// </summary>
+        public String IpType {
+            get {
+                return IsIPv6 ? "IPv6" : "IPv4";
+            }
+        }
+
+        /// <summary>
         /// Simple check of the IP address family.
         /// </summary>
         public bool IsIPv6 {
