@@ -1,9 +1,9 @@
 language: csharp
 dist: xenial
 addons:
-  ssh_known_hosts: vps2.jmay.us
+  ssh_known_hosts: vps.jmay.us
 env:
-  - deploy_server=vps2.jmay.us deploy_user=deploy_hostname_jmay_us
+  - deploy_server=vps.jmay.us deploy_user=deploy_hostname_jmay_us
     deploy_service=kesteral-hostname
 mono: none
 dotnet: 2.2
