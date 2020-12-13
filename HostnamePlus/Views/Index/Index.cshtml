@@ -3,11 +3,12 @@
 @{
     ViewData["title"] = "Hostname+";
     Layout = "~/Pages/_Layout.cshtml";
+    Model.StartProxyIpsHostNameResolution();
 }
 @section Scripts {
     <script>
-        var otherIpAPIURL = "@Model.OtherIpAPIURL";
-        var otherIpType = "@Model.OtherIpType";
+        var otherIpAPIURL = "@Model.MakeOtherIpAPIURL()";
+        var otherIpType = "@Model.GetOtherIpType()";
     </script>
 }
 @section DevelopmentScripts {
@@ -18,20 +19,20 @@
 }
 
 <h2 class="sectionHeading">Hostname</h2>
-<span class='versionLabel'>@Model.IpType: </span>@await Model.GetHostNameAsync()<br />
+<span class='versionLabel'>@Model.GetIpType(): </span>@Model.HostName<br />
 <span id="OtherHostname"></span>
-@foreach (IpInfoModel ipInfo in Model.ProxiedIpsInfo)
+@foreach (IpInfoModel ipInfo in Model.GetProxiedIpsInfo())
 {
-    <span class='versionLabel'>X-Forwarded-For: </span>@await ipInfo.HostNameTask<br />
+    <span class='versionLabel'>X-Forwarded-For: </span>@await ipInfo.GetHostNameAsync()<br />
 }
 
 <h2 class="sectionHeading">IP</h2>
-<span class='versionLabel'>@Model.IpType: </span>@Model.IP<br />
+<span class='versionLabel'>@Model.GetIpType(): </span>@Model.IP<br />
 <span id="OtherAddress"></span>
-@foreach (IpInfoModel ipInfo in Model.ProxiedIpsInfo)
+@foreach (IpInfoModel ipInfo in Model.GetProxiedIpsInfo())
 {
     <span class='versionLabel'>X-Forwarded-For: </span>@ipInfo.IpString<br />
 }
 
 <h2 class="sectionHeading">User Agent</h2>
-@Model.UserAgent
+@Model.GetUserAgent()

@@ -17,7 +17,7 @@ namespace HostnamePlus.Models
         /// A string of the client's User Agent from the request headers. Empty
         /// string if the header is missing.
         /// </summary>
-        public String UserAgent;
+        private String UserAgent;
         /// <summary>
         /// The IpInfoModel with the client's IP address.
         /// </summary>
@@ -28,7 +28,7 @@ namespace HostnamePlus.Models
         /// unsanitized user input, which may not be valid IP addresses or
         /// truthful information.
         /// </summary>
-        public readonly IpInfoModel[] ProxiedIpsInfo;
+        private IpInfoModel[] ProxiedIpsInfo = null;
 
         /// <summary>
         /// Constructs the model with the client's request connection.
@@ -47,31 +47,25 @@ namespace HostnamePlus.Models
         /// If the client is connected via IPv4, this URL is for the IPv6 only
         /// API.
         /// </summary>
-        public String OtherIpAPIURL {
-            get {
-                // If the connection is IPv6, hit the IPv4 API, and vice versa.
-                String subdomain = RemoteIpInfo.IsIPv6 ? "ipv4" : "ipv6";
-                return String.Format("//{0}.{1}/api/OtherIp",
-                    subdomain, Program.BASE_URL);
-            }
+        public String MakeOtherIpAPIURL() {
+            // If the connection is IPv6, hit the IPv4 API, and vice versa.
+            String subdomain = RemoteIpInfo.IsIPv6 ? "ipv4" : "ipv6";
+            return String.Format("//{0}.{1}/api/OtherIp",
+                subdomain, Program.BASE_URL);
         }
 
         /// <summary>
         /// The friendly text for the alternate IP family.
         /// </summary>
-        public String OtherIpType {
-            get {
-                return RemoteIpInfo.IsIPv6 ? "IPv4" : "IPv6";
-            }
+        public String GetOtherIpType() {
+            return RemoteIpInfo.IsIPv6 ? "IPv4" : "IPv6";
         }
 
         /// <summary>
         /// The friendly text for the IP family.
         /// </summary>
-        public String IpType {
-            get {
-                return RemoteIpInfo.IsIPv6 ? "IPv6" : "IPv4";
-            }
+        public String GetIpType() {
+            return RemoteIpInfo.IsIPv6 ? "IPv6" : "IPv4";
         }
 
         /// <summary>
@@ -101,20 +95,39 @@ namespace HostnamePlus.Models
         }
 
         /// <summary>
-        /// Whether there's any IPs found in X-Forwarded-For header(s).
+        /// Start reverse DNS resolution of all X-Forwarded-For IP addresses in
+        /// the background. The results are available through
+        /// GetProxiedIpsInfo().
         /// </summary>
-        public Boolean HasProxiedIps {
-            get {
-                return ProxiedIpsInfo.Length > 0;
+        public void StartProxyIpsHostNameResolution() {
+            foreach (IpInfoModel ipInfo in ProxiedIpsInfo) {
+                ipInfo.StartHostNameResolution();
             }
         }
 
         /// <summary>
-        /// The reverse DNS of the client's IP, or N/A if the DNS lookup fails.
-        /// IPv6 reverse DNS lookups often fail.
+        /// Whether there's any IPs found in X-Forwarded-For header(s).
         /// </summary>
-        public async Task<String> GetHostNameAsync() {
-            return await RemoteIpInfo.HostNameTask;
+        public Boolean HasProxiedIps() {
+            return ProxiedIpsInfo.Length > 0;
+        }
+
+        /// <summary>
+        /// If the X-Forwarded-For header exists, this is an array populated
+        /// with each IP found in the forward chain. Note that this is
+        /// unsanitized user input, which may not be valid IP addresses or
+        /// truthful information.
+        /// </summary>
+        public IpInfoModel[] GetProxiedIpsInfo() {
+            return ProxiedIpsInfo;
+        }
+
+        /// <summary>
+        /// A string of the client's User Agent from the request headers. Empty
+        /// string if the header is missing.
+        /// </summary>
+        public String GetUserAgent() {
+            return UserAgent;
         }
 
         /// <summary>
@@ -123,6 +136,17 @@ namespace HostnamePlus.Models
         public String IP {
             get {
                 return RemoteIpInfo.IpString;
+            }
+        }
+
+        /// <summary>
+        /// The reverse DNS of the client's IP, or N/A if the DNS lookup fails.
+        /// IPv6 reverse DNS lookups often fail. Note that this is a blocking
+        /// call that waits on DNS resolution.
+        /// <summary>
+        public String HostName {
+            get {
+                return RemoteIpInfo.GetHostName();
             }
         }
     }

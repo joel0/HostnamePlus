@@ -25,27 +25,33 @@ namespace HostnamePlus.Models
         /// "N/A" if DNS resolution fails for any reason (usually NXDOMAIN).
         /// Otherwise, contains the FQDN string.
         /// </summary>
-        public readonly Task<String> HostNameTask;
+        private Task<String> HostNameTask = null;
 
         /// <summary>
         /// Constructs a model for requesting info about the provided IP.
-        /// Starts DNS resolution asynchronously.
         /// </summary>
         public IpInfoModel(IPAddress Ip) {
             this.Ip = Ip;
-            HostNameTask = ResolveHostNameAsync();
         }
 
         /// <summary>
         /// Constructs a model for requesting info about the provided IP.
-        /// Starts DNS resolution asynchronously, if the provided IP is valid.
         /// </summary>
         /// <param name="Ip">the IP address as a string, which is allowed to be
         /// malformed. Malformed IPs will provide limited info.</param>
         public IpInfoModel(string Ip) {
             this.RawIp = Ip;
             IPAddress.TryParse(Ip, out this.Ip);
-            HostNameTask = ResolveHostNameAsync();
+        }
+
+        /// <summary>
+        /// Asynchronously start DNS resolution of the IP, if it hasn't been
+        /// started yet.
+        /// </summary>
+        public void StartHostNameResolution() {
+            if (HostNameTask == null) {
+                HostNameTask = ResolveHostNameAsync();
+            }
         }
 
         /// <summary>
@@ -69,6 +75,28 @@ namespace HostnamePlus.Models
                     return "-";
                 }
             });
+        }
+
+        /// <summary>
+        /// Query reverse DNS for the host name. Resolution may be slow.
+        /// </summary>
+        /// <returns>"-" if the IP is malformed. "N/A" if the resolution fails.
+        /// Otherwise, the FQDN returned by DNS.</returns>
+        public async Task<String> GetHostNameAsync() {
+            StartHostNameResolution();
+            return await HostNameTask;
+        }
+
+        /// <summary>
+        /// Query reverse DNS for the host name. This synchronous function
+        /// blocks until resolution completes.
+        /// <summary>
+        /// <returns>"-" if the IP is malformed. "N/A" if the resolution fails.
+        /// Otherwise, the FQDN returned by DNS.</returns>
+        public String GetHostName() {
+            StartHostNameResolution();
+            HostNameTask.Wait();
+            return HostNameTask.Result;
         }
 
         /// <summary>
