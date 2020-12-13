@@ -1,4 +1,5 @@
-﻿@model HostnamePlus.Models.IndexModel
+﻿@using HostnamePlus.Models
+@model HostnamePlus.Models.IndexModel
 @{
     ViewData["title"] = "Hostname+";
     Layout = "~/Pages/_Layout.cshtml";
@@ -17,12 +18,20 @@
 }
 
 <h2 class="sectionHeading">Hostname</h2>
-<span class='versionLabel'>@Model.IpType: </span>@Model.HostName<br />
+<span class='versionLabel'>@Model.IpType: </span>@await Model.GetHostNameAsync()<br />
 <span id="OtherHostname"></span>
+@foreach (IpInfoModel ipInfo in Model.ProxiedIpsInfo)
+{
+    <span class='versionLabel'>X-Forwarded-For: </span>@await ipInfo.HostNameTask<br />
+}
 
 <h2 class="sectionHeading">IP</h2>
 <span class='versionLabel'>@Model.IpType: </span>@Model.IP<br />
 <span id="OtherAddress"></span>
+@foreach (IpInfoModel ipInfo in Model.ProxiedIpsInfo)
+{
+    <span class='versionLabel'>X-Forwarded-For: </span>@ipInfo.IpString<br />
+}
 
 <h2 class="sectionHeading">User Agent</h2>
 @Model.UserAgent

@@ -1,9 +1,15 @@
-﻿@model HostnamePlus.Models.IndexModel
+﻿@using HostnamePlus.Models
+@model HostnamePlus.Models.IndexModel
 @{
-    const String formatString = "{0,-11}";
+    String formatString = Model.HasProxiedIps ? "{0,-20}" : "{0,-11}";
 }
-@String.Format(formatString, "Hostname: ")@Model.HostName
+@String.Format(formatString, "Hostname: ")@await Model.GetHostNameAsync()
 @String.Format(formatString, "IP: ")@Model.IP
+@foreach (IpInfoModel ipInfo in Model.ProxiedIpsInfo)
+{
+    @String.Format(formatString, "X-Forwarder-For IP: ")@ipInfo.IpString@Html.Raw("\n")
+    @String.Format(formatString, "X-Forwarded-For HN: ")@await ipInfo.HostNameTask@Html.Raw("\n")
+}
 @String.Format(formatString, "UserAgent: ")@Model.UserAgent
 
 Simplified output for curl. Change your UserAgent for HTML output.

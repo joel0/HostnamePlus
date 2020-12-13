@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace HostnamePlus.Models
 {
@@ -12,9 +14,21 @@ namespace HostnamePlus.Models
     public class IndexModel
     {
         /// <summary>
-        /// The request object of connection from the client.
+        /// A string of the client's User Agent from the request headers. Empty
+        /// string if the header is missing.
         /// </summary>
-        private readonly HttpRequest Request;
+        public String UserAgent;
+        /// <summary>
+        /// The IpInfoModel with the client's IP address.
+        /// </summary>
+        private readonly IpInfoModel RemoteIpInfo;
+        /// <summary>
+        /// If the X-Forwarded-For header exists, this is an array populated
+        /// with each IP found in the forward chain. Note that this is
+        /// unsanitized user input, which may not be valid IP addresses or
+        /// truthful information.
+        /// </summary>
+        public readonly IpInfoModel[] ProxiedIpsInfo;
 
         /// <summary>
         /// Constructs the model with the client's request connection.
@@ -23,7 +37,9 @@ namespace HostnamePlus.Models
         /// load the page</param>
         public IndexModel(HttpRequest Request)
         {
-            this.Request = Request;
+            UserAgent = Request.Headers["User-Agent"].ToString();
+            RemoteIpInfo = new IpInfoModel(Request.HttpContext.Connection.RemoteIpAddress);
+            ProxiedIpsInfo = GetProxiedIpsInfo(Request.Headers["X-Forwarded-For"].ToString(), 10);
         }
 
         /// <summary>
@@ -34,7 +50,7 @@ namespace HostnamePlus.Models
         public String OtherIpAPIURL {
             get {
                 // If the connection is IPv6, hit the IPv4 API, and vice versa.
-                String subdomain = IsIPv6 ? "ipv4" : "ipv6";
+                String subdomain = RemoteIpInfo.IsIPv6 ? "ipv4" : "ipv6";
                 return String.Format("//{0}.{1}/api/OtherIp",
                     subdomain, Program.BASE_URL);
             }
@@ -45,7 +61,7 @@ namespace HostnamePlus.Models
         /// </summary>
         public String OtherIpType {
             get {
-                return IsIPv6 ? "IPv4" : "IPv6";
+                return RemoteIpInfo.IsIPv6 ? "IPv4" : "IPv6";
             }
         }
 
@@ -54,25 +70,42 @@ namespace HostnamePlus.Models
         /// </summary>
         public String IpType {
             get {
-                return IsIPv6 ? "IPv6" : "IPv4";
+                return RemoteIpInfo.IsIPv6 ? "IPv6" : "IPv4";
             }
         }
 
         /// <summary>
-        /// Simple check of the IP address family.
+        /// Parses the X-Forwarded-For header into IpInfoModels. This
+        /// immediately starts host name resolution asynchronously on all IPs.
         /// </summary>
-        public bool IsIPv6 {
-            get {
-                return RemoteIpAddress.AddressFamily == AddressFamily.InterNetworkV6;
+        /// <param name="xForwardedFor">a comma separated list of IP addresses
+        /// from one or more X-Forwarded-For headers.</param>
+        private static IpInfoModel[] GetProxiedIpsInfo(string xForwardedFor, int limit) {
+            if (String.IsNullOrWhiteSpace(xForwardedFor)) {
+                return new IpInfoModel[0];
             }
+
+            String[] untrimmedIps = xForwardedFor.Split(',', limit + 1, StringSplitOptions.RemoveEmptyEntries);
+            // Constraint the IPs to process to the size limit.
+            if (untrimmedIps.Length > limit) {
+                untrimmedIps[limit] = "truncated results";
+            }
+            // Trim and convert raw header values to IpInfoModels.
+            List<IpInfoModel> ipsInfo = new List<IpInfoModel>(untrimmedIps.Length);
+            Array.ForEach(untrimmedIps, untrimmedIp => {
+                if (!String.IsNullOrWhiteSpace(untrimmedIp)) {
+                    ipsInfo.Add(new IpInfoModel(untrimmedIp.Trim()));
+                }
+            });
+            return ipsInfo.ToArray();
         }
 
         /// <summary>
-        /// The client's IP address, sourced from the Request.
+        /// Whether there's any IPs found in X-Forwarded-For header(s).
         /// </summary>
-        private IPAddress RemoteIpAddress {
+        public Boolean HasProxiedIps {
             get {
-                return Request.HttpContext.Connection.RemoteIpAddress;
+                return ProxiedIpsInfo.Length > 0;
             }
         }
 
@@ -80,14 +113,8 @@ namespace HostnamePlus.Models
         /// The reverse DNS of the client's IP, or N/A if the DNS lookup fails.
         /// IPv6 reverse DNS lookups often fail.
         /// </summary>
-        public String HostName {
-            get {
-                try {
-                    return Dns.GetHostEntry(RemoteIpAddress).HostName;
-                } catch {
-                    return "N/A";
-                }
-            }
+        public async Task<String> GetHostNameAsync() {
+            return await RemoteIpInfo.HostNameTask;
         }
 
         /// <summary>
@@ -95,17 +122,7 @@ namespace HostnamePlus.Models
         /// </summary>
         public String IP {
             get {
-                return RemoteIpAddress.ToString();
-            }
-        }
-
-        /// <summary>
-        /// A string of the client's User Agent from the request headers. Empty
-        /// string if the header is missing.
-        /// </summary>
-        public String UserAgent {
-            get {
-                return Request.Headers["User-Agent"].ToString();
+                return RemoteIpInfo.IpString;
             }
         }
     }
