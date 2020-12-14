@@ -8,7 +8,7 @@
 @String.Format(formatString, "IP: ")@Model.IP
 @foreach (IpInfoModel ipInfo in Model.GetProxiedIpsInfo())
 {
-    @String.Format(formatString, "X-Forwarder-For IP: ")@ipInfo.IpString@Html.Raw("\n")
+    @String.Format(formatString, "X-Forwarded-For IP: ")@ipInfo.IpString@Html.Raw("\n")
     @String.Format(formatString, "X-Forwarded-For HN: ")@await ipInfo.GetHostNameAsync()@Html.Raw("\n")
 }
 @String.Format(formatString, "UserAgent: ")@Model.GetUserAgent()

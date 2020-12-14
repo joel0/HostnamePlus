@@ -23,7 +23,7 @@
 <span id="OtherHostname"></span>
 @foreach (IpInfoModel ipInfo in Model.GetProxiedIpsInfo())
 {
-    <span class='versionLabel'>X-Forwarded-For: </span>@await ipInfo.GetHostNameAsync()<br />
+    <br /><span class='versionLabel'>X-Forwarded-For: </span>@await ipInfo.GetHostNameAsync()<br />
 }
 
 <h2 class="sectionHeading">IP</h2>
@@ -31,7 +31,7 @@
 <span id="OtherAddress"></span>
 @foreach (IpInfoModel ipInfo in Model.GetProxiedIpsInfo())
 {
-    <span class='versionLabel'>X-Forwarded-For: </span>@ipInfo.IpString<br />
+    <br /><span class='versionLabel'>X-Forwarded-For: </span>@ipInfo.IpString<br />
 }
 
 <h2 class="sectionHeading">User Agent</h2>

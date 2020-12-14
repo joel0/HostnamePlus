@@ -16,8 +16,8 @@ function handleReply() {
         // This object is defined in Models/IndexModel.
         var otherIpInfo = this.response;
         var prefix = "<br /><span class='versionLabel'>" + otherIpType + ": </span>";
-        var addressInnnerHtml = prefix + otherIpInfo.ip;
-        var hostNameInnerHtml = prefix + otherIpInfo.hostName;
+        var addressInnnerHtml = prefix + otherIpInfo.ip + "<br />";
+        var hostNameInnerHtml = prefix + otherIpInfo.hostName + "<br />";
         document.getElementById("OtherAddress").innerHTML = addressInnnerHtml;
         document.getElementById("OtherHostname").innerHTML = hostNameInnerHtml;
     }
