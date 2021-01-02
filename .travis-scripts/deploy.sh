@@ -14,7 +14,7 @@ echo stopped
 rsync -vrlpt \
     --delete \
     --delete-excluded \
-    HostnamePlus/publish/ $deploy_user@$deploy_server:~/www/
+    ./publish/ $deploy_user@$deploy_server:~/www/
 
 echo -n Starting $deploy_service...
 ssh $deploy_user@$deploy_server sudo systemctl start $deploy_service

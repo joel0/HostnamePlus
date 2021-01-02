@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Hosting;
 
 namespace HostnamePlus
 {
@@ -22,11 +23,10 @@ namespace HostnamePlus
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
                 Program.getOtherIpJsPath = "/js/GetOtherIp.js";
                 Program.mainCssPath = "/css/main.css";
             } else {
@@ -42,11 +42,11 @@ namespace HostnamePlus
             });
 
             app.UseStaticFiles();
-
-            app.UseMvc(routes => {
-                routes.MapRoute(
+            app.UseRouting();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Index}/{action=Index}/");
+                    pattern: "{controller=Index}/{action=Index}/");
             });
         }
     }
